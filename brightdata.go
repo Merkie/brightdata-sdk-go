@@ -9,9 +9,10 @@ type BrightDataClient struct {
 	credentials BrightDataCredentials
 }
 
-func NewBrightDataClient(username string, credentials BrightDataCredentials) *BrightDataClient {
-	return &BrightDataClient{
-		username,
-		credentials,
-	}
+func NewBrightDataClient(username string) *BrightDataClient {
+	return &BrightDataClient{username: username}
+}
+
+func (client *BrightDataClient) AuthenticateSerp(serpPassword string) {
+	client.credentials.serp = serpPassword
 }

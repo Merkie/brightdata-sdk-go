@@ -18,9 +18,8 @@ func TestMain(m *testing.M) {
 		panic("BRIGHTDATA_SERP_PASSWORD is not set")
 	}
 
-	BDSerpClient = NewBrightDataClient(bdUsername, BrightDataCredentials{
-		serp: bdSerpPassword,
-	})
+	BDSerpClient = NewBrightDataClient(bdUsername)
+	BDSerpClient.AuthenticateSerp(bdSerpPassword)
 
 	// Run the tests
 	os.Exit(m.Run())
