@@ -2,6 +2,7 @@
 
 ![Go verion 1.21.3](https://img.shields.io/badge/Go-1.21.3-blue)
 ![0 Dependencies](https://img.shields.io/badge/Dependencies-0-blue)
+![85% Test Coverage](https://img.shields.io/badge/Test_Coverage-85%25-yellow)
 
 SDK for [Bright Data](https://brightdata.com/)'s proxy APIs implemented in GoLang
 
