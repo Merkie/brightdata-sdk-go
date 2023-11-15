@@ -16,7 +16,7 @@ go get -u "github.com/merkie/brightdata-sdk-go"
 
 ## Authenticating
 
-The two things needed to authenticate with Bright Data are your customer ID and the passwords of the services you plan on using with the SDK. To get these, copy one of the proxy URLs provided by Bright Data and match the example here: `http://brd-<CUSTOMER ID>-zone-xxx:<SERVICE PASSWORD>@brd.superproxy.io:22225`. If you want to use multiple services, all you will need is the passwords; you only submit your customer ID once.
+To authenticate with Bright Data, you need your customer ID and the passwords for the services you intend to use with the SDK. Obtain these by copying a proxy URL from Bright Data, formatted as `http://brd-<CUSTOMER ID>-zone-xxx:<SERVICE PASSWORD>@brd.superproxy.io:22225`. For multiple services, only the service passwords are required after the initial submission of your customer ID.
 
 ## Code Example
 
