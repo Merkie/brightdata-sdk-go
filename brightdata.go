@@ -5,12 +5,12 @@ type BrightDataCredentials struct {
 }
 
 type BrightDataClient struct {
-	username    string
+	customerID  string
 	credentials BrightDataCredentials
 }
 
-func NewBrightDataClient(username string) *BrightDataClient {
-	return &BrightDataClient{username: username}
+func NewBrightDataClient(customerID string) *BrightDataClient {
+	return &BrightDataClient{customerID: customerID}
 }
 
 func (client *BrightDataClient) AuthenticateSerp(serpPassword string) {

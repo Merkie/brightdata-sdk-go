@@ -5,44 +5,50 @@ import (
 	"testing"
 )
 
-var BDSerpClient *BrightDataClient
+var Client *BrightDataClient
 
 func TestMain(m *testing.M) {
-	bdUsername := os.Getenv("BRIGHTDATA_USERNAME")
-	if bdUsername == "" {
-		panic("BRIGHTDATA_USERNAME is not set")
+	// get env variables
+	customerID := os.Getenv("BRIGHTDATA_CUSTOMER_ID")
+	if customerID == "" {
+		panic("BRIGHTDATA_CUSTOMER_ID is not set")
 	}
 
-	bdSerpPassword := os.Getenv("BRIGHTDATA_SERP_PASSWORD")
-	if bdSerpPassword == "" {
+	serpPassword := os.Getenv("BRIGHTDATA_SERP_PASSWORD")
+	if serpPassword == "" {
 		panic("BRIGHTDATA_SERP_PASSWORD is not set")
 	}
 
-	BDSerpClient = NewBrightDataClient(bdUsername)
-	BDSerpClient.AuthenticateSerp(bdSerpPassword)
+	// Create and authenticate client
+	Client = NewBrightDataClient(customerID)
+	Client.AuthenticateSerp(serpPassword)
 
 	// Run the tests
 	os.Exit(m.Run())
 }
 
-func TestSearchGoogleOutputJson(t *testing.T) {
-	searchResult, err := BDSerpClient.GoogleSearch("brightdata", false, "en", "us")
+func TestSearchGoogle(t *testing.T) {
+	// Perform the search
+	searchResult, err := Client.GoogleSearch("brightdata", "en", "us")
+
+	// Checks
 	if err != nil {
 		t.Fatalf("Error in GoogleSearch: %v", err)
 	}
 
-	if len(searchResult.Data.Organic) == 0 {
-		t.Errorf("No search results returned")
-	}
-}
-
-func TestSearchGoogleOutputHTML(t *testing.T) {
-	searchResult, err := BDSerpClient.GoogleSearch("brightdata", true, "en", "us")
-	if err != nil {
-		t.Fatalf("Error in GoogleSearch: %v", err)
+	if searchResult == nil {
+		t.Fatalf("searchResult is nil")
 	}
 
-	if len(searchResult.Html) == 0 {
-		t.Errorf("No search results returned")
+	if len(searchResult.Organic) == 0 {
+		t.Fatalf("searchResult.Organic is empty")
+	}
+
+	if searchResult.Organic[0].Link == "" {
+		t.Fatalf("searchResult.Organic[0].Link is empty")
+	}
+
+	if searchResult.Html == "" {
+		t.Fatalf("searchResult.Html is empty")
 	}
 }

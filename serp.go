@@ -15,7 +15,7 @@ func (client *BrightDataClient) getserpHTTPClient() (*http.Client, error) {
 	}
 
 	// configure proxy
-	proxyURL, err := url.Parse(fmt.Sprintf("http://%s-zone-serp:%s@brd.superproxy.io:22225", client.username, client.credentials.serp))
+	proxyURL, err := url.Parse(fmt.Sprintf("http://brd-customer-%s-zone-serp:%s@brd.superproxy.io:22225", client.customerID, client.credentials.serp))
 	if err != nil {
 		return nil, err
 	}
