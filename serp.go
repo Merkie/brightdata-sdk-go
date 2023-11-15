@@ -7,21 +7,21 @@ import (
 	"net/url"
 )
 
-var SerpHTTPClient *http.Client
+var serpHTTPClient *http.Client
 
-func (client *BrightDataClient) getSerpHTTPClient() (*http.Client, error) {
-	if SerpHTTPClient != nil {
-		return SerpHTTPClient, nil
+func (client *BrightDataClient) getserpHTTPClient() (*http.Client, error) {
+	if serpHTTPClient != nil {
+		return serpHTTPClient, nil
 	}
 
 	// configure proxy
-	proxyURL, err := url.Parse(fmt.Sprintf("http://%s-zone-serp:%s@brd.superproxy.io:22225", client.Username, client.Credentials.Serp))
+	proxyURL, err := url.Parse(fmt.Sprintf("http://%s-zone-serp:%s@brd.superproxy.io:22225", client.username, client.credentials.serp))
 	if err != nil {
 		return nil, err
 	}
 
 	// configure HTTP client
-	SerpHTTPClient = &http.Client{
+	serpHTTPClient = &http.Client{
 		Transport: &http.Transport{
 			Proxy: http.ProxyURL(proxyURL),
 			TLSClientConfig: &tls.Config{
@@ -30,5 +30,5 @@ func (client *BrightDataClient) getSerpHTTPClient() (*http.Client, error) {
 		},
 	}
 
-	return SerpHTTPClient, nil
+	return serpHTTPClient, nil
 }

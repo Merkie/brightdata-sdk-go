@@ -13,7 +13,7 @@ type BrightDataGoogleSearchResponse struct {
 }
 
 func (client *BrightDataClient) GoogleSearch(query string, html bool, lang string, countryCode string) (*BrightDataGoogleSearchResponse, error) {
-	httpClient, err := client.getSerpHTTPClient()
+	httpClient, err := client.getserpHTTPClient()
 	if err != nil {
 		return nil, err
 	}

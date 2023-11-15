@@ -19,7 +19,7 @@ func TestMain(m *testing.M) {
 	}
 
 	BDSerpClient = NewBrightDataClient(bdUsername, BrightDataCredentials{
-		Serp: bdSerpPassword,
+		serp: bdSerpPassword,
 	})
 
 	// Run the tests

@@ -1,17 +1,17 @@
 package brightdatasdk
 
 type BrightDataCredentials struct {
-	Serp string
+	serp string
 }
 
 type BrightDataClient struct {
-	Username    string
-	Credentials BrightDataCredentials
+	username    string
+	credentials BrightDataCredentials
 }
 
 func NewBrightDataClient(username string, credentials BrightDataCredentials) *BrightDataClient {
 	return &BrightDataClient{
-		Username:    username,
-		Credentials: credentials,
+		username,
+		credentials,
 	}
 }
