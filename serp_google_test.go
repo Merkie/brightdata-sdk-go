@@ -32,7 +32,7 @@ func TestSearchGoogleOutputJson(t *testing.T) {
 		t.Fatalf("Error in GoogleSearch: %v", err)
 	}
 
-	if len(searchResult.data.Organic) == 0 {
+	if len(searchResult.Data.Organic) == 0 {
 		t.Errorf("No search results returned")
 	}
 }
@@ -43,7 +43,7 @@ func TestSearchGoogleOutputHTML(t *testing.T) {
 		t.Fatalf("Error in GoogleSearch: %v", err)
 	}
 
-	if len(searchResult.html) == 0 {
+	if len(searchResult.Html) == 0 {
 		t.Errorf("No search results returned")
 	}
 }

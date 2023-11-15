@@ -9,7 +9,7 @@ import (
 
 var SerpHTTPClient *http.Client
 
-func (client *BrightDataClient) GetSerpHTTPClient() (*http.Client, error) {
+func (client *BrightDataClient) getSerpHTTPClient() (*http.Client, error) {
 	if SerpHTTPClient != nil {
 		return SerpHTTPClient, nil
 	}

@@ -8,12 +8,12 @@ import (
 )
 
 type BrightDataGoogleSearchResponse struct {
-	data *GoogleSearchResult
-	html string
+	Data *GoogleSearchResult
+	Html string
 }
 
 func (client *BrightDataClient) GoogleSearch(query string, html bool, lang string, countryCode string) (*BrightDataGoogleSearchResponse, error) {
-	httpClient, err := client.GetSerpHTTPClient()
+	httpClient, err := client.getSerpHTTPClient()
 	if err != nil {
 		return nil, err
 	}
@@ -63,9 +63,9 @@ func (client *BrightDataClient) GoogleSearch(query string, html bool, lang strin
 			return nil, err
 		}
 
-		return &BrightDataGoogleSearchResponse{data: &searchResult}, nil
+		return &BrightDataGoogleSearchResponse{Data: &searchResult}, nil
 	}
 
 	// just return the html as a string if html is true
-	return &BrightDataGoogleSearchResponse{html: string(body)}, nil
+	return &BrightDataGoogleSearchResponse{Html: string(body)}, nil
 }
