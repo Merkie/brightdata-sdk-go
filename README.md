@@ -1,33 +1,3 @@
-# Bright Data SDK for Go
-
-![Go verion 1.21.3](https://img.shields.io/badge/Go-1.21.3-blue)
-![0 Dependencies](https://img.shields.io/badge/Dependencies-0-blue)
-
-SDK for [Bright Data](https://brightdata.com/)'s proxy APIs implemented in GoLang
-
-> [!IMPORTANT]
-> This project is currently functionally **incomplete**; features you may expect might still need to be implemented.
-
-## Install
-
-```bash
-go get -u "github.com/merkie/brightdata-sdk-go"
-```
-
-## Authenticating
-
-The two things needed to authenticate with Bright Data are your customer ID and the passwords of the services you plan on using with the SDK. To get these, copy one of the proxy URLs provided by Bright Data and match the example here: `http://brd-<CUSTOMER ID>-zone-xxx:<SERVICE PASSWORD>@brd.superproxy.io:22225`. If you want to use multiple services, all you will need is the passwords; you only submit your customer ID once.
-
-## Code Example
-
-**.bashrc** *(or your shell's source file)*
-```bash
-export BRIGHTDATA_CUSTOMER_ID=...
-export BRIGHTDATA_SERP_PASSWORD=...
-```
-
-**your-go-project/main.go**
-```go
 package main
 
 import (
@@ -45,6 +15,8 @@ func main() {
 	// client.AuthenticateISP(...)
 	// client.AuthenticateUnblocker(...)
 	// ...
+
+	// Now that we are authenticated, let's perform a basic Google search for "brightdata"
 
 	query := "brightdata"
 
@@ -66,15 +38,3 @@ func main() {
 
 	fmt.Println(searchResult.Html[:200], "...")
 }
-```
-
-## Coming Soon...
-* API.md
-* Error Handling docs
-* SERP docs
-* Full support for all SERP functions
-* Support for data center, ISP, unblocker, residential, and mobile services
-* Verbose logging
-* Usage tracking in request count and money spent
-* RAM-based and SQLite-based caching
-* Functions to help with making an async job endpoint
