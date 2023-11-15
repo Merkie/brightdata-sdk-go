@@ -6,7 +6,7 @@
 SDK for [Bright Data](https://brightdata.com/)'s proxy APIs implemented in GoLang
 
 > [!IMPORTANT]
-> This project is currently functionally **incomplete**, features you may expect might not be implemented yet.
+> This project is currently functionally **incomplete**; features you may expect might still need to be implemented.
 
 ## Install
 
@@ -16,14 +16,13 @@ go get -u "github.com/merkie/brightdata-sdk-go"
 
 ## Authenticating
 
-There are two things you need to connect to the Bright Data SDK, you need your Bright Data username and the password(s) to the services you will be using.
-As an example, if your proxy URL for SERP is `http://brd-customer-hl_userid-zone-serp:password123@brd.superproxy.io:22225`, you will insert `brd-customer-hl_userid` as your username and `password123` as your SERP authentication.
+The two things needed to authenticate with Bright Data are your customer ID and the passwords of the services you plan on using with the SDK. To get these, copy one of the proxy URLs provided by Bright Data and match the example here: `http://brd-<CUSTOMER ID>-zone-xxx:<SERVICE PASSWORD>@brd.superproxy.io:22225`. If you want to use multiple services, all you will need is the passwords; you only submit your customer ID once.
 
 ## Code Example
 
 **.bashrc** *(or your shell's source file)*
 ```bash
-export BRIGHTDATA_USERNAME=...
+export BRIGHTDATA_CUSTOMER_ID=...
 export BRIGHTDATA_SERP_PASSWORD=...
 ```
 
@@ -40,14 +39,16 @@ import (
 )
 
 func main() {
-	client := brightdatasdk.NewBrightDataClient(os.Getenv("BRIGHTDATA_USERNAME"))
+	client := NewBrightDataClient(os.Getenv("BRIGHTDATA_CUSTOMER_ID"))
 	client.AuthenticateSerp(os.Getenv("BRIGHTDATA_SERP_PASSWORD"))
 	// client.AuthenticateDataCenter(...)
 	// client.AuthenticateISP(...)
 	// client.AuthenticateUnblocker(...)
 	// ...
 
-	searchResult, err := client.GoogleSearch("brightdata", false, "en", "us")
+	query := "brightdata"
+
+	searchResult, err := client.GoogleSearch(query, "en", "us")
 	if err != nil {
 		panic(err)
 	}
