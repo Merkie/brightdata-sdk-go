@@ -1,12 +1,15 @@
 # Bright Data SDK for Go
 
 ![Go verion 1.21.3](https://img.shields.io/badge/Go-1.21.3-blue)
+![75% Coverage](https://img.shields.io/badge/Test_Coverage-75%25-yellow)
+[![Go Reference](https://pkg.go.dev/badge/github.com/merkie/brightdata-sdk-go.svg)](https://pkg.go.dev/github.com/merkie/brightdata-sdk-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/merkie/brightdata-sdk-go)](https://goreportcard.com/report/github.com/merkie/brightdata-sdk-go)
 ![0 Dependencies](https://img.shields.io/badge/Dependencies-0-blue)
 
 SDK for [Bright Data](https://brightdata.com/)'s proxy APIs implemented in GoLang
 
 > [!IMPORTANT]
-> This project is currently functionally **incomplete**, features you may expect might not be implemented yet.
+> This project is currently functionally **incomplete**; features you may expect might still need to be implemented.
 
 ## Install
 
@@ -16,14 +19,13 @@ go get -u "github.com/merkie/brightdata-sdk-go"
 
 ## Authenticating
 
-There are two things you need to connect to the Bright Data SDK, you need your Bright Data username and the password(s) to the services you will be using.
-As an example, if your proxy URL for SERP is `http://brd-customer-hl_userid-zone-serp:password123@brd.superproxy.io:22225`, you will insert `brd-customer-hl_userid` as your username and `password123` as your SERP authentication.
+To authenticate with Bright Data, you need your customer ID and the passwords for the services you intend to use with the SDK. Obtain these by copying a proxy URL from Bright Data, formatted as `http://brd-<CUSTOMER ID>-zone-xxx:<SERVICE PASSWORD>@brd.superproxy.io:22225`. For multiple services, only the service passwords are required after the initial submission of your customer ID.
 
 ## Code Example
 
 **.bashrc** *(or your shell's source file)*
 ```bash
-export BRIGHTDATA_USERNAME=...
+export BRIGHTDATA_CUSTOMER_ID=...
 export BRIGHTDATA_SERP_PASSWORD=...
 ```
 
@@ -40,26 +42,34 @@ import (
 )
 
 func main() {
-	client := brightdatasdk.NewBrightDataClient(os.Getenv("BRIGHTDATA_USERNAME"))
+	client := brightdatasdk.NewBrightDataClient(os.Getenv("BRIGHTDATA_CUSTOMER_ID"))
 	client.AuthenticateSerp(os.Getenv("BRIGHTDATA_SERP_PASSWORD"))
 	// client.AuthenticateDataCenter(...)
 	// client.AuthenticateISP(...)
 	// client.AuthenticateUnblocker(...)
 	// ...
 
-	searchResult, err := client.GoogleSearch("brightdata", false, "en", "us")
+	// Now that we are authenticated, let's perform a basic Google search for "brightdata"
+
+	query := "brightdata"
+
+	searchResult, err := client.GoogleSearch(query, "en", "us")
 	if err != nil {
 		panic(err)
 	}
 
 	// At this point it's a fully-typed struct, let's unmarshal the first result and print it
 
-	json, err := json.Marshal(searchResult.Data.Organic[0])
+	json, err := json.MarshalIndent(searchResult.Organic[0], "", "  ")
 	if err != nil {
 		panic(err)
 	}
 
 	fmt.Println(string(json))
+
+	// You can also access the raw html of the page as a string
+
+	fmt.Println(searchResult.Html[:200], "...")
 }
 ```
 
