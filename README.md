@@ -1,31 +1,41 @@
 # Bright Data SDK for Go
 
-![Go verion 1.21.3](https://img.shields.io/badge/Go-1.21.3-blue)
+![Go Version 1.21.3](https://img.shields.io/badge/Go-1.21.3-blue)
 [![Go Reference](https://pkg.go.dev/badge/github.com/merkie/brightdata-sdk-go.svg)](https://pkg.go.dev/github.com/merkie/brightdata-sdk-go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/merkie/brightdata-sdk-go)](https://goreportcard.com/report/github.com/merkie/brightdata-sdk-go)
 
-SDK for [Bright Data](https://brightdata.com/)'s proxy APIs implemented in GoLang
+The Bright Data SDK for Go provides a convenient and efficient way to interact with [Bright Data](https://brightdata.com/)'s proxy APIs using GoLang.
 
 > [!IMPORTANT]
-> This project is currently functionally **incomplete**; features you may expect might still need to be implemented.
+> This project is currently in an **incomplete** state. Some expected features are yet to be implemented.
 
-## Install
+## Installation
+
+Install the SDK using the following command:
 
 ```bash
 go get -u "github.com/merkie/brightdata-sdk-go"
 ```
 
-## Authenticating
+## Authentication
 
-To authenticate with Bright Data, you need your customer ID and the passwords for the services you intend to use with the SDK. Obtain these by copying a proxy URL from Bright Data, formatted as `http://brd-<CUSTOMER ID>-zone-xxx:<SERVICE PASSWORD>@brd.superproxy.io:22225`. For multiple services, only the service passwords are required after the initial submission of your customer ID.
+To use the Bright Data SDK, you need your customer ID and the passwords for the services you wish to use. These can be obtained from a Bright Data proxy URL, formatted as follows:
 
-## Code Example
-
-**.bashrc** *(or your shell's source file)*
-```bash
-export BRIGHTDATA_CUSTOMER_ID=...
-export BRIGHTDATA_SERP_PASSWORD=...
 ```
+http://brd-<CUSTOMER ID>-zone-xxx:<SERVICE PASSWORD>@brd.superproxy.io:22225
+```
+
+## Usage Example
+
+Set your Bright Data credentials in your environment:
+
+**.bashrc** *(or your shell's equivalent configuration file)*
+```bash
+export BRIGHTDATA_CUSTOMER_ID=your_customer_id
+export BRIGHTDATA_SERP_PASSWORD=your_serp_password
+```
+
+Example usage in a Go project:
 
 **your-go-project/main.go**
 ```go
@@ -43,35 +53,30 @@ func main() {
 	client := brightdatasdk.NewBrightDataClient(os.Getenv("BRIGHTDATA_CUSTOMER_ID"))
 	client.AuthenticateSerp(os.Getenv("BRIGHTDATA_SERP_PASSWORD"))
 
-	// Now that we are authenticated, let's perform a basic Google search for "brightdata"
-
+	// Perform a Google search for "brightdata"
 	searchResult, err := client.GoogleSearch("brightdata").CountryCode("us").Lang("en").Execute()
 	if err != nil {
 		panic(err)
 	}
 
-	// At this point it's a fully-typed struct, let's unmarshal the first result and print it
-
-	json, err := json.MarshalIndent(searchResult.Organic[0], "", "  ")
+	// Print the first result as JSON
+	jsonData, err := json.MarshalIndent(searchResult.Organic[0], "", "  ")
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println(string(jsonData))
 
-	fmt.Println(string(json))
-
-	// You can also access the raw html of the page as a string
-
+	// You can also access the raw HTML too!
 	fmt.Println(searchResult.Html[:200], "...")
 }
 ```
 
-## Coming Soon...
-* API.md
-* Error Handling docs
-* SERP docs
-* Full support for all SERP functions
-* Support for data center, ISP, unblocker, residential, and mobile services
-* Verbose logging
-* Usage tracking in request count and money spent
-* RAM-based and SQLite-based caching
-* Functions to help with making an async job endpoint
+## Roadmap
+
+- [ ] Error handling guidelines
+- [ ] Full implementation of all SERP functions
+- [ ] Support for various proxy services (data center, ISP, unblocker, residential, mobile)
+- [ ] Verbose logging capabilities
+- [ ] Usage tracking (request count and cost)
+- [ ] RAM-based and SQLite-based caching options
+- [ ] Utility functions for asynchronous job endpoints
