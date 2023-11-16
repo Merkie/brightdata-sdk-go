@@ -31,26 +31,26 @@ func TestSearchGoogle(t *testing.T) {
 	// Perform the search
 	// searchResult, err := Client.GoogleSearch("brightdata", "en", "us")
 
-	searchResult, err := Client.GoogleSearch("brightdata").CountryCode("us").Lang("en").Pagination(10, 0).Execute()
+	searchResponse, err := Client.GoogleSearch("brightdata").CountryCode("us").Lang("en").Pagination(10, 0).Execute()
 
 	// Checks
 	if err != nil {
 		t.Fatalf("Error in GoogleSearch: %v", err)
 	}
 
-	if searchResult == nil {
-		t.Fatalf("searchResult is nil")
+	if searchResponse == nil {
+		t.Fatalf("searchResponse is nil")
 	}
 
-	if len(searchResult.Organic) == 0 {
-		t.Fatalf("searchResult.Organic is empty")
+	if len(searchResponse.Organic) == 0 {
+		t.Fatalf("searchResponse.Organic is empty")
 	}
 
-	if searchResult.Organic[0].Link == "" {
-		t.Fatalf("searchResult.Organic[0].Link is empty")
+	if searchResponse.Organic[0].Link == "" {
+		t.Fatalf("searchResponse.Organic[0].Link is empty")
 	}
 
-	if searchResult.Html == "" {
-		t.Fatalf("searchResult.Html is empty")
+	if searchResponse.Html == "" {
+		t.Fatalf("searchResponse.Html is empty")
 	}
 }
