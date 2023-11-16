@@ -44,16 +44,10 @@ import (
 func main() {
 	client := brightdatasdk.NewBrightDataClient(os.Getenv("BRIGHTDATA_CUSTOMER_ID"))
 	client.AuthenticateSerp(os.Getenv("BRIGHTDATA_SERP_PASSWORD"))
-	// client.AuthenticateDataCenter(...)
-	// client.AuthenticateISP(...)
-	// client.AuthenticateUnblocker(...)
-	// ...
 
 	// Now that we are authenticated, let's perform a basic Google search for "brightdata"
 
-	query := "brightdata"
-
-	searchResult, err := client.GoogleSearch(query, "en", "us")
+	searchResult, err := client.GoogleSearch("brightdata").CountryCode("us").Lang("en").Execute()
 	if err != nil {
 		panic(err)
 	}
