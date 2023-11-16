@@ -31,7 +31,7 @@ func TestSearchGoogle(t *testing.T) {
 	// Perform the search
 	// searchResult, err := Client.GoogleSearch("brightdata", "en", "us")
 
-	searchResult, err := Client.GoogleSearch("brightdata").CountryCode("us").Lang("en").Pagination(10, 0).Do()
+	searchResult, err := Client.GoogleSearch("brightdata").CountryCode("us").Lang("en").Pagination(10, 0).Execute()
 
 	// Checks
 	if err != nil {

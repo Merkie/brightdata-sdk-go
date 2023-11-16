@@ -50,7 +50,7 @@ func (request *googleSearchRequest) UseMobileDevice(useMobileDevice bool) *googl
 	return request
 }
 
-func (request *googleSearchRequest) Do() (*GoogleSearchResponse, error) {
+func (request *googleSearchRequest) Execute() (*GoogleSearchResponse, error) {
 	httpClient, err := request.client.getserpHTTPClient()
 	if err != nil {
 		return nil, err
