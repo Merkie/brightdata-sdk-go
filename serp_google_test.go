@@ -29,7 +29,9 @@ func TestMain(m *testing.M) {
 
 func TestSearchGoogle(t *testing.T) {
 	// Perform the search
-	searchResult, err := Client.GoogleSearch("brightdata", "en", "us")
+	// searchResult, err := Client.GoogleSearch("brightdata", "en", "us")
+
+	searchResult, err := Client.GoogleSearch("brightdata").CountryCode("us").Lang("en").Pagination(10, 0).Do()
 
 	// Checks
 	if err != nil {
