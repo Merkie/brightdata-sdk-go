@@ -1,10 +1,8 @@
 # Bright Data SDK for Go
 
 ![Go verion 1.21.3](https://img.shields.io/badge/Go-1.21.3-blue)
-![75% Coverage](https://img.shields.io/badge/Test_Coverage-75%25-yellow)
 [![Go Reference](https://pkg.go.dev/badge/github.com/merkie/brightdata-sdk-go.svg)](https://pkg.go.dev/github.com/merkie/brightdata-sdk-go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/merkie/brightdata-sdk-go)](https://goreportcard.com/report/github.com/merkie/brightdata-sdk-go)
-![0 Dependencies](https://img.shields.io/badge/Dependencies-0-blue)
 
 SDK for [Bright Data](https://brightdata.com/)'s proxy APIs implemented in GoLang
 
