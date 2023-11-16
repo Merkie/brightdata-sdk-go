@@ -17,6 +17,7 @@ type googleSearchRequest struct {
 	client          *BrightDataClient
 }
 
+// GoogleSearch creates a new googleSearchRequest struct that can be executed via the Execute function
 func (client *BrightDataClient) GoogleSearch(query string) *googleSearchRequest {
 	return &googleSearchRequest{
 		query:           query,
@@ -29,27 +30,32 @@ func (client *BrightDataClient) GoogleSearch(query string) *googleSearchRequest 
 	}
 }
 
+// Lang sets the language of the search
 func (request *googleSearchRequest) Lang(lang string) *googleSearchRequest {
 	request.lang = lang
 	return request
 }
 
+// CountryCode sets the country of the search
 func (request *googleSearchRequest) CountryCode(countryCode string) *googleSearchRequest {
 	request.countryCode = countryCode
 	return request
 }
 
+// Pagination sets the pagination of the search
 func (request *googleSearchRequest) Pagination(resultsPerPage int, page int) *googleSearchRequest {
 	request.resultsPerPage = resultsPerPage
 	request.page = page
 	return request
 }
 
+// UseMobileDevice enables mobile device emulation
 func (request *googleSearchRequest) UseMobileDevice(useMobileDevice bool) *googleSearchRequest {
 	request.useMobileDevice = useMobileDevice
 	return request
 }
 
+// Execute executes the google search request
 func (request *googleSearchRequest) Execute() (*GoogleSearchResponse, error) {
 	httpClient, err := request.client.getserpHTTPClient()
 	if err != nil {

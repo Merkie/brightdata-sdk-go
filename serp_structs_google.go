@@ -1,5 +1,6 @@
 package brightdatasdk
 
+// GoogleSearchResponse is the response from the Google Search API
 type GoogleSearchResponse struct {
 	General struct {
 		SearchEngine string  `json:"search_engine"`
@@ -21,6 +22,7 @@ type GoogleSearchResponse struct {
 	FeaturedSnippets []GoogleFeaturedSnippet `json:"featured_snippets"`
 }
 
+// GoogleSearchResult is a single result from the Google Search API response
 type GoogleSearchResult struct {
 	Link        string  `json:"link"`
 	DisplayLink string  `json:"display_link"`
@@ -53,6 +55,8 @@ type GoogleSearchResult struct {
 		GlobalRank  int     `json:"global_rank"`
 	} `json:"subresults,omitempty"`
 }
+
+// GoogleFeaturedSnippet is a single featured snippet from the Google Search API response
 type GoogleFeaturedSnippet struct {
 	Type        string `json:"type"`
 	DisplayLink string `json:"display_link"`
