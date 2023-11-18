@@ -50,7 +50,7 @@ func (request *googleMapsRequest) Pagination(results int, skip int) *googleMapsR
 
 // Execute executes the google maps request
 func (request *googleMapsRequest) Execute() (*GoogleMapsResponse, error) {
-	url, err := url.Parse("https://www.google.com/maps/search/" + request.query)
+	url, err := url.Parse("https://www.google.com/maps/search/" + url.QueryEscape(request.query))
 	if err != nil {
 		return nil, err
 	}
