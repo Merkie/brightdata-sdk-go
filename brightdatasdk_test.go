@@ -25,9 +25,7 @@ func TestMain(m *testing.M) {
 	}
 
 	// Create and authenticate client
-	Client = NewBrightDataClient(customerID)
-	Client.AuthenticateSerp(serpPassword)
-	Client.AuthenticateUnblocker(unblockerPassword)
+	Client = NewBrightDataClient(customerID).AuthenticateSerp(serpPassword).AuthenticateUnblocker(unblockerPassword)
 
 	// Run the tests
 	os.Exit(m.Run())

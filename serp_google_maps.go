@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/http"
+	"net/url"
 )
 
 type googleMapsRequest struct {
@@ -48,22 +50,40 @@ func (request *googleMapsRequest) Pagination(results int, skip int) *googleMapsR
 
 // Execute executes the google maps request
 func (request *googleMapsRequest) Execute() (*GoogleMapsResponse, error) {
-	httpClient, err := request.client.getserpHTTPClient()
+	url, err := url.Parse("https://www.google.com/maps/search/" + request.query)
 	if err != nil {
 		return nil, err
 	}
 
-	// make the url
-	url := fmt.Sprintf("https://www.google.com/maps/search/%s/?q=%s&gl=%s&lang=%s&start=%s&num=%s&brd_json=1", request.query, request.query, request.countryCode, request.lang, fmt.Sprint(request.skip), fmt.Sprint(request.results))
+	q := url.Query()
+	q.Add("q", request.query)
+	q.Add("gl", request.countryCode)
+	q.Add("lang", request.lang)
+	q.Add("start", fmt.Sprint(request.skip))
+	q.Add("num", fmt.Sprint(request.results))
+	q.Add("brd_json", "html")
+	url.RawQuery = q.Encode()
 
-	// perform the request
-	resp, err := httpClient.Get(url)
+	// Get serp http client
+	serpHTTPClient, err := request.client.getserpHTTPClient()
 	if err != nil {
 		return nil, err
 	}
+
+	// create request
+	req, err := http.NewRequest("GET", url.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// execute request
+	resp, err := serpHTTPClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	// read response body
 	defer resp.Body.Close()
-
-	// read the response as bytes
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
@@ -74,6 +94,7 @@ func (request *googleMapsRequest) Execute() (*GoogleMapsResponse, error) {
 		return nil, fmt.Errorf("invalid auth")
 	}
 
+	// parse response body
 	var mapsResponse GoogleMapsResponse
 	err = json.Unmarshal(body, &mapsResponse)
 	if err != nil {

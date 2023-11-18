@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/http"
+	"net/url"
 )
 
 type googleSearchRequest struct {
@@ -56,27 +58,43 @@ func (request *googleSearchRequest) UseMobileDevice(useMobileDevice bool) *googl
 
 // Execute executes the google search request
 func (request *googleSearchRequest) Execute() (*GoogleSearchResponse, error) {
-	httpClient, err := request.client.getserpHTTPClient()
+	url, err := url.Parse("https://www.google.com/search")
 	if err != nil {
 		return nil, err
 	}
 
-	// make the url
-	url := fmt.Sprintf("https://www.google.com/search?q=%s&gl=%s&lang=%s&start=%s&num=%s&brd_json=1", request.query, request.countryCode, request.lang, fmt.Sprint(request.page), fmt.Sprint(request.resultsPerPage))
-
-	// add mobile device if needed
-	if request.useMobileDevice {
-		url = url + "&brd_mobile=1"
+	q := url.Query()
+	q.Add("q", request.query)
+	q.Add("gl", request.countryCode)
+	q.Add("lang", request.lang)
+	q.Add("start", fmt.Sprint(request.page))
+	q.Add("num", fmt.Sprint(request.resultsPerPage))
+	q.Add("brd_json", "html")
+	if request.useMobileDevice { // add mobile device if needed
+		q.Add("brd_mobile", "1")
 	}
+	url.RawQuery = q.Encode()
 
-	// perform the request
-	resp, err := httpClient.Get(url)
+	// Get serp http client
+	serpHTTPClient, err := request.client.getserpHTTPClient()
 	if err != nil {
 		return nil, err
 	}
+
+	// create request
+	req, err := http.NewRequest("GET", url.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// execute request
+	resp, err := serpHTTPClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	// read response body
 	defer resp.Body.Close()
-
-	// read the response as bytes
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
@@ -87,11 +105,12 @@ func (request *googleSearchRequest) Execute() (*GoogleSearchResponse, error) {
 		return nil, fmt.Errorf("invalid auth")
 	}
 
-	var searchResult GoogleSearchResponse
-	err = json.Unmarshal(body, &searchResult)
+	// parse response body
+	var googleSearchResponse GoogleSearchResponse
+	err = json.Unmarshal(body, &googleSearchResponse)
 	if err != nil {
 		return nil, err
 	}
 
-	return &searchResult, nil
+	return &googleSearchResponse, nil
 }
