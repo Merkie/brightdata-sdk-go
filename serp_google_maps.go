@@ -1,6 +1,8 @@
 package brightdatasdk
 
 import (
+	"bytes"
+	"compress/gzip"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -83,10 +85,30 @@ func (request *googleMapsRequest) Execute() (*GoogleMapsResponse, error) {
 	}
 
 	// read response body
-	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
+	var body []byte
+
+	// Check if the response is encoded in gzip format
+	if resp.Header.Get("Content-Encoding") == "gzip" {
+		reader, err := gzip.NewReader(resp.Body)
+		if err != nil {
+			panic(err)
+		}
+		defer reader.Close()
+		// Read the decompressed response body
+		decoded, err := io.ReadAll(reader)
+		if err != nil {
+			panic(err)
+		}
+
+		body = decoded
+	} else {
+		// The response is not gzip encoded, so read it directly
+		decoded, err := io.ReadAll(resp.Body)
+		if err != nil {
+			panic(err)
+		}
+
+		body = decoded
 	}
 
 	// invalid auth check (error from brightdata)
@@ -98,7 +120,23 @@ func (request *googleMapsRequest) Execute() (*GoogleMapsResponse, error) {
 	var mapsResponse GoogleMapsResponse
 	err = json.Unmarshal(body, &mapsResponse)
 	if err != nil {
-		return nil, err
+		fmt.Println("attempting gzip decoding")
+		// Attempt gzip decoding on error
+		gzipReader, gzipErr := gzip.NewReader(io.NopCloser(bytes.NewReader(body)))
+		if gzipErr != nil {
+			return nil, fmt.Errorf("failed to decode response: %v, gzip error: %v", err, gzipErr)
+		}
+		defer gzipReader.Close()
+
+		decompressedBody, gzipErr := io.ReadAll(gzipReader)
+		if gzipErr != nil {
+			return nil, fmt.Errorf("failed to decompress gzip: %v", gzipErr)
+		}
+
+		err = json.Unmarshal(decompressedBody, &mapsResponse)
+		if err != nil {
+			return nil, fmt.Errorf("failed to decode decompressed response: %v", err)
+		}
 	}
 
 	return &mapsResponse, nil

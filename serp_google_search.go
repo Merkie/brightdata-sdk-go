@@ -1,6 +1,8 @@
 package brightdatasdk
 
 import (
+	"bytes"
+	"compress/gzip"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -109,7 +111,23 @@ func (request *googleSearchRequest) Execute() (*GoogleSearchResponse, error) {
 	var googleSearchResponse GoogleSearchResponse
 	err = json.Unmarshal(body, &googleSearchResponse)
 	if err != nil {
-		return nil, err
+		fmt.Println("attempting gzip decoding")
+		// Attempt gzip decoding on error
+		gzipReader, gzipErr := gzip.NewReader(io.NopCloser(bytes.NewReader(body)))
+		if gzipErr != nil {
+			return nil, fmt.Errorf("failed to decode response: %v, gzip error: %v", err, gzipErr)
+		}
+		defer gzipReader.Close()
+
+		decompressedBody, gzipErr := io.ReadAll(gzipReader)
+		if gzipErr != nil {
+			return nil, fmt.Errorf("failed to decompress gzip: %v", gzipErr)
+		}
+
+		err = json.Unmarshal(decompressedBody, &googleSearchResponse)
+		if err != nil {
+			return nil, fmt.Errorf("failed to decode decompressed response: %v", err)
+		}
 	}
 
 	return &googleSearchResponse, nil
