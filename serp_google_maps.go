@@ -120,7 +120,6 @@ func (request *googleMapsRequest) Execute() (*GoogleMapsResponse, error) {
 	var mapsResponse GoogleMapsResponse
 	err = json.Unmarshal(body, &mapsResponse)
 	if err != nil {
-		fmt.Println("attempting gzip decoding")
 		// Attempt gzip decoding on error
 		gzipReader, gzipErr := gzip.NewReader(io.NopCloser(bytes.NewReader(body)))
 		if gzipErr != nil {

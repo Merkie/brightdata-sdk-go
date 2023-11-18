@@ -111,7 +111,6 @@ func (request *googleSearchRequest) Execute() (*GoogleSearchResponse, error) {
 	var googleSearchResponse GoogleSearchResponse
 	err = json.Unmarshal(body, &googleSearchResponse)
 	if err != nil {
-		fmt.Println("attempting gzip decoding")
 		// Attempt gzip decoding on error
 		gzipReader, gzipErr := gzip.NewReader(io.NopCloser(bytes.NewReader(body)))
 		if gzipErr != nil {
