@@ -18,11 +18,13 @@ func NewBrightDataClient(customerID string) *BrightDataClient {
 }
 
 // AuthenticateSerp authenticates the client for SERP requests
-func (client *BrightDataClient) AuthenticateSerp(serpPassword string) {
+func (client *BrightDataClient) AuthenticateSerp(serpPassword string) *BrightDataClient {
 	client.credentials.serp = serpPassword
+	return client
 }
 
 // AuthenticateUnblocker authenticates the client for Unblocker requests
-func (client *BrightDataClient) AuthenticateUnblocker(unblockerPassword string) {
+func (client *BrightDataClient) AuthenticateUnblocker(unblockerPassword string) *BrightDataClient {
 	client.credentials.unblocker = unblockerPassword
+	return client
 }
