@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"net/url"
 )
 
 type googleMapsRequest struct {
@@ -55,7 +54,7 @@ func (request *googleMapsRequest) Execute() (*GoogleMapsResponse, error) {
 	}
 
 	// make the url
-	url := fmt.Sprintf("https://www.google.com/maps/search/%s/?q=%s&gl=%s&lang=%s&start=%s&num=%s&brd_json=1", url.QueryEscape(request.query), url.QueryEscape(request.query), url.QueryEscape(request.countryCode), url.QueryEscape(request.lang), url.QueryEscape(fmt.Sprint(request.skip)), url.QueryEscape(fmt.Sprint(request.results)))
+	url := fmt.Sprintf("https://www.google.com/maps/search/%s/?q=%s&gl=%s&lang=%s&start=%s&num=%s&brd_json=1", request.query, request.query, request.countryCode, request.lang, fmt.Sprint(request.skip), fmt.Sprint(request.results))
 
 	// perform the request
 	resp, err := httpClient.Get(url)

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"net/url"
 )
 
 type googleSearchRequest struct {
@@ -63,7 +62,7 @@ func (request *googleSearchRequest) Execute() (*GoogleSearchResponse, error) {
 	}
 
 	// make the url
-	url := fmt.Sprintf("https://www.google.com/search?q=%s&gl=%s&lang=%s&start=%s&num=%s&brd_json=1", url.QueryEscape(request.query), url.QueryEscape(request.countryCode), url.QueryEscape(request.lang), url.QueryEscape(fmt.Sprint(request.page)), url.QueryEscape(fmt.Sprint(request.resultsPerPage)))
+	url := fmt.Sprintf("https://www.google.com/search?q=%s&gl=%s&lang=%s&start=%s&num=%s&brd_json=1", request.query, request.countryCode, request.lang, fmt.Sprint(request.page), fmt.Sprint(request.resultsPerPage))
 
 	// add mobile device if needed
 	if request.useMobileDevice {
