@@ -3,7 +3,6 @@ package brightdatasdk
 import (
 	"crypto/tls"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 )
@@ -51,26 +50,33 @@ func (client *BrightDataClient) Unblocker(url string) *unblockerRequest {
 func (request *unblockerRequest) Execute() (string, error) {
 	unblockerClient, err := request.client.getUnblockerHTTPClient()
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	// create request
 	req, err := http.NewRequest("GET", request.url, nil)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
+
+	// add gzip header
+	req.Header.Add("Accept-Encoding", "gzip")
 
 	// send request
 	resp, err := unblockerClient.Do(req)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
-	// read response
-	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
+	// Read response
+	body, err := ReadResponse(resp)
 	if err != nil {
-		panic(err)
+		return "", err
+	}
+
+	// invalid auth check (error from brightdata)
+	if string(body) == "Invalid Auth" {
+		return "", fmt.Errorf("invalid auth")
 	}
 
 	return string(body), nil

@@ -1,11 +1,8 @@
 package brightdatasdk
 
 import (
-	"bytes"
-	"compress/gzip"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 )
@@ -78,37 +75,24 @@ func (request *googleMapsRequest) Execute() (*GoogleMapsResponse, error) {
 		return nil, err
 	}
 
+	// add gzip header
+	req.Header.Add("Accept-Encoding", "gzip")
+
 	// execute request
 	resp, err := serpHTTPClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
 
-	// read response body
-	var body []byte
+	// print all headers
+	for k, v := range resp.Header {
+		fmt.Printf("%s: %s\n", k, v)
+	} // one says Content-Encoding: [gzip]
 
-	// Check if the response is encoded in gzip format
-	if resp.Header.Get("Content-Encoding") == "gzip" {
-		reader, err := gzip.NewReader(resp.Body)
-		if err != nil {
-			panic(err)
-		}
-		defer reader.Close()
-		// Read the decompressed response body
-		decoded, err := io.ReadAll(reader)
-		if err != nil {
-			panic(err)
-		}
-
-		body = decoded
-	} else {
-		// The response is not gzip encoded, so read it directly
-		decoded, err := io.ReadAll(resp.Body)
-		if err != nil {
-			panic(err)
-		}
-
-		body = decoded
+	// Read response
+	body, err := ReadResponse(resp)
+	if err != nil {
+		return nil, err
 	}
 
 	// invalid auth check (error from brightdata)
@@ -120,22 +104,7 @@ func (request *googleMapsRequest) Execute() (*GoogleMapsResponse, error) {
 	var mapsResponse GoogleMapsResponse
 	err = json.Unmarshal(body, &mapsResponse)
 	if err != nil {
-		// Attempt gzip decoding on error
-		gzipReader, gzipErr := gzip.NewReader(io.NopCloser(bytes.NewReader(body)))
-		if gzipErr != nil {
-			return nil, fmt.Errorf("failed to decode response: %v, gzip error: %v", err, gzipErr)
-		}
-		defer gzipReader.Close()
-
-		decompressedBody, gzipErr := io.ReadAll(gzipReader)
-		if gzipErr != nil {
-			return nil, fmt.Errorf("failed to decompress gzip: %v", gzipErr)
-		}
-
-		err = json.Unmarshal(decompressedBody, &mapsResponse)
-		if err != nil {
-			return nil, fmt.Errorf("failed to decode decompressed response: %v", err)
-		}
+		return nil, err
 	}
 
 	return &mapsResponse, nil
