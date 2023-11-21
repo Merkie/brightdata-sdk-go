@@ -84,11 +84,6 @@ func (request *googleMapsRequest) Execute() (*GoogleMapsResponse, error) {
 		return nil, err
 	}
 
-	// print all headers
-	for k, v := range resp.Header {
-		fmt.Printf("%s: %s\n", k, v)
-	} // one says Content-Encoding: [gzip]
-
 	// Read response
 	body, err := ReadResponse(resp)
 	if err != nil {
