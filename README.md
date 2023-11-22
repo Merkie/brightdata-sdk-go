@@ -324,3 +324,7 @@ Contributions to `brightdata-sdk-go` are welcome! Please refer to the project's 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+_Note: This project is not affiliated with Bright Data LLC or Google LLC._
