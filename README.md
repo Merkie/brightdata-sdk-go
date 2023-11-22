@@ -2,6 +2,7 @@
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/merkie/brightdata-sdk-go.svg)](https://pkg.go.dev/github.com/merkie/brightdata-sdk-go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/merkie/brightdata-sdk-go)](https://goreportcard.com/report/github.com/merkie/brightdata-sdk-go)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 The Bright Data SDK for Go provides a convenient type-safe way to interact with [Bright Data](https://brightdata.com/)'s proxy APIs.
 
