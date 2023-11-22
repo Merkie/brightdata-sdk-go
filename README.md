@@ -325,6 +325,6 @@ Contributions to `brightdata-sdk-go` are welcome! Please refer to the project's 
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
+## Legal Disclaimer
 
-_Note: This project is not affiliated with Bright Data LLC or Google LLC._
+This project is an independent, community-driven effort and is not officially affiliated with, endorsed by, or in any way connected to Bright Data, Google, Microsoft (Bing), Yandex, or any of their subsidiaries or affiliates. The names Bright Data, Google, Bing, Yandex, and any related trademarks are the property of their respective owners and are used here for identification purposes only. This project is developed under the MIT License and is not associated with any official offerings from these entities.
